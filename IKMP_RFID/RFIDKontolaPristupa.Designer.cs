@@ -51,6 +51,7 @@
             this.btnDodaj.TabIndex = 0;
             this.btnDodaj.Text = "DODAJ";
             this.btnDodaj.UseVisualStyleBackColor = true;
+            this.btnDodaj.Click += new System.EventHandler(this.btnDodaj_Click);
             // 
             // btnObrisi
             // 
@@ -60,6 +61,7 @@
             this.btnObrisi.TabIndex = 1;
             this.btnObrisi.Text = "OBRISI";
             this.btnObrisi.UseVisualStyleBackColor = true;
+            this.btnObrisi.Click += new System.EventHandler(this.btnObrisi_Click);
             // 
             // bntPrikazi
             // 
@@ -141,12 +143,12 @@
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 15;
-            this.listBox1.Location = new System.Drawing.Point(198, 27);
+            this.listBox1.Location = new System.Drawing.Point(182, 27);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(559, 319);
             this.listBox1.TabIndex = 8;
             // 
-            // Form1
+            // RFIDKontolaPristupa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -161,7 +163,7 @@
             this.Controls.Add(this.btnDodaj);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "RFIDKontolaPristupa";
             this.Text = "Form1";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Git\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID.csproj": {}
+    "C:\\Git\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID.csproj": {}
   },
   "projects": {
-    "C:\\Git\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID.csproj": {
+    "C:\\Git\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Git\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID.csproj",
+        "projectUniqueName": "C:\\Git\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID.csproj",
         "projectName": "IKMP_RFID",
-        "projectPath": "C:\\Git\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID.csproj",
+        "projectPath": "C:\\Git\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID.csproj",
         "packagesPath": "C:\\Users\\Kicic\\.nuget\\packages\\",
-        "outputPath": "C:\\Git\\IKMP_RFID\\IKMP_RFID\\IKMP_RFID\\obj\\",
+        "outputPath": "C:\\Git\\IKMP_RFID\\IKMP_RFID\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -44,6 +44,10 @@
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
           "dependencies": {
+            "Npgsql": {
+              "target": "Package",
+              "version": "[6.0.4, )"
+            },
             "System.IO.Ports": {
               "target": "Package",
               "version": "[6.0.0, )"
