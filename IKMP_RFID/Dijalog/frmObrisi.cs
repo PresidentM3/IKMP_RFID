@@ -17,13 +17,48 @@ namespace IKMP_RFID.Dijalog
             InitializeComponent();
         }
 
-        private void comboBoxPretraga_SelectedIndexChanged(object sender, EventArgs e)
+        private string pretragaKriterijum;
+
+        public string PretragaKriterijum
         {
-            if (comboBoxPretraga.ValueMember == "Prezime")
+            get { return pretragaKriterijum; }
+        }
+
+        private string unos;
+        public string Unos
+        { 
+            get { return unos; } 
+
+        }
+
+
+        private void comboBoxPretra_DropDownClosed(object sender, EventArgs e)
+        {
+
+            pretragaKriterijum = (string)comboBoxPretraga.SelectedItem;
+            
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (textBoxUnos.Text.Length > 0) 
             {
-                RFIDKontolaPristupa f1 = new();
-                f1.print2list("Prezime za obrisati");
+                unos = textBoxUnos.Text;
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
+            else
+            {
+                MessageBox.Show("Unos prazan!");
+            }
+
+            
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

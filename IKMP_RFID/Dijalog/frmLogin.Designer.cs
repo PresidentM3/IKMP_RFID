@@ -1,6 +1,6 @@
 ﻿namespace IKMP_RFID.Dijalog
 {
-    partial class frmLogin
+    partial class FrmLogin
     {
         /// <summary>
         /// Required designer variable.
@@ -32,6 +32,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.txtSifra = new System.Windows.Forms.TextBox();
+            this.buttonOdustani = new System.Windows.Forms.Button();
+            this.buttonPotvrdi = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -60,6 +62,7 @@
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(100, 23);
             this.txtUserName.TabIndex = 2;
+            this.txtUserName.Text = "Username";
             // 
             // txtSifra
             // 
@@ -67,12 +70,37 @@
             this.txtSifra.Name = "txtSifra";
             this.txtSifra.Size = new System.Drawing.Size(100, 23);
             this.txtSifra.TabIndex = 3;
+            this.txtSifra.Text = "Password";
+            // 
+            // buttonOdustani
+            // 
+            this.buttonOdustani.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonOdustani.Location = new System.Drawing.Point(12, 109);
+            this.buttonOdustani.Name = "buttonOdustani";
+            this.buttonOdustani.Size = new System.Drawing.Size(110, 41);
+            this.buttonOdustani.TabIndex = 4;
+            this.buttonOdustani.Text = "Odustani";
+            this.buttonOdustani.UseVisualStyleBackColor = true;
+            this.buttonOdustani.Click += new System.EventHandler(this.buttonOdustani_Click);
+            // 
+            // buttonPotvrdi
+            // 
+            this.buttonPotvrdi.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonPotvrdi.Location = new System.Drawing.Point(173, 109);
+            this.buttonPotvrdi.Name = "buttonPotvrdi";
+            this.buttonPotvrdi.Size = new System.Drawing.Size(100, 41);
+            this.buttonPotvrdi.TabIndex = 5;
+            this.buttonPotvrdi.Text = "Potvrdi";
+            this.buttonPotvrdi.UseVisualStyleBackColor = true;
+            this.buttonPotvrdi.Click += new System.EventHandler(this.buttonPotvrdi_Click);
             // 
             // frmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(303, 179);
+            this.Controls.Add(this.buttonPotvrdi);
+            this.Controls.Add(this.buttonOdustani);
             this.Controls.Add(this.txtSifra);
             this.Controls.Add(this.txtUserName);
             this.Controls.Add(this.label2);
@@ -90,5 +118,7 @@
         private Label label2;
         private TextBox txtUserName;
         private TextBox txtSifra;
+        private Button buttonOdustani;
+        private Button buttonPotvrdi;
     }
 }

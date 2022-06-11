@@ -55,3 +55,4 @@ C:\Git\IKMP_RFID\IKMP_RFID\obj\Debug\net6.0-windows\IKMP_RFID.pdb
 C:\Git\IKMP_RFID\IKMP_RFID\obj\Debug\net6.0-windows\IKMP_RFID.genruntimeconfig.cache
 C:\Git\IKMP_RFID\IKMP_RFID\obj\Debug\net6.0-windows\ref\IKMP_RFID.dll
 C:\Git\IKMP_RFID\IKMP_RFID\obj\Debug\net6.0-windows\IKMP_RFID.Dijalog.FormObrisi.resources
+C:\Git\IKMP_RFID\IKMP_RFID\obj\Debug\net6.0-windows\IKMP_RFID.Dijalog.FrmIzmjeni.resources

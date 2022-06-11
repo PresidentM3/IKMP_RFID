@@ -40,12 +40,14 @@
             this.loginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.panelMain = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
+            this.panelMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnDodaj
             // 
-            this.btnDodaj.Location = new System.Drawing.Point(31, 50);
+            this.btnDodaj.Location = new System.Drawing.Point(12, 5);
             this.btnDodaj.Name = "btnDodaj";
             this.btnDodaj.Size = new System.Drawing.Size(117, 40);
             this.btnDodaj.TabIndex = 0;
@@ -55,7 +57,7 @@
             // 
             // btnObrisi
             // 
-            this.btnObrisi.Location = new System.Drawing.Point(31, 96);
+            this.btnObrisi.Location = new System.Drawing.Point(12, 51);
             this.btnObrisi.Name = "btnObrisi";
             this.btnObrisi.Size = new System.Drawing.Size(117, 40);
             this.btnObrisi.TabIndex = 1;
@@ -65,25 +67,27 @@
             // 
             // bntPrikazi
             // 
-            this.bntPrikazi.Location = new System.Drawing.Point(31, 142);
+            this.bntPrikazi.Location = new System.Drawing.Point(12, 97);
             this.bntPrikazi.Name = "bntPrikazi";
             this.bntPrikazi.Size = new System.Drawing.Size(117, 40);
             this.bntPrikazi.TabIndex = 2;
             this.bntPrikazi.Text = "PRIKAZI";
             this.bntPrikazi.UseVisualStyleBackColor = true;
+            this.bntPrikazi.Click += new System.EventHandler(this.bntPrikazi_Click);
             // 
             // btnIzmjeni
             // 
-            this.btnIzmjeni.Location = new System.Drawing.Point(31, 188);
+            this.btnIzmjeni.Location = new System.Drawing.Point(12, 143);
             this.btnIzmjeni.Name = "btnIzmjeni";
             this.btnIzmjeni.Size = new System.Drawing.Size(117, 40);
             this.btnIzmjeni.TabIndex = 3;
             this.btnIzmjeni.Text = "IZMJENI";
             this.btnIzmjeni.UseVisualStyleBackColor = true;
+            this.btnIzmjeni.Click += new System.EventHandler(this.btnIzmjeni_Click);
             // 
             // btnDozvola
             // 
-            this.btnDozvola.Location = new System.Drawing.Point(31, 261);
+            this.btnDozvola.Location = new System.Drawing.Point(12, 216);
             this.btnDozvola.Name = "btnDozvola";
             this.btnDozvola.Size = new System.Drawing.Size(117, 40);
             this.btnDozvola.TabIndex = 4;
@@ -92,7 +96,7 @@
             // 
             // bntKraj
             // 
-            this.bntKraj.Location = new System.Drawing.Point(31, 398);
+            this.bntKraj.Location = new System.Drawing.Point(12, 353);
             this.bntKraj.Name = "bntKraj";
             this.bntKraj.Size = new System.Drawing.Size(117, 40);
             this.bntKraj.TabIndex = 5;
@@ -114,7 +118,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(788, 24);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -130,43 +134,55 @@
             // loginToolStripMenuItem
             // 
             this.loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            this.loginToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.loginToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loginToolStripMenuItem.Text = "Login";
+            this.loginToolStripMenuItem.Click += new System.EventHandler(this.loginToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 15;
-            this.listBox1.Location = new System.Drawing.Point(182, 27);
+            this.listBox1.Location = new System.Drawing.Point(157, 5);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(559, 319);
+            this.listBox1.Size = new System.Drawing.Size(559, 379);
             this.listBox1.TabIndex = 8;
+            // 
+            // panelMain
+            // 
+            this.panelMain.Controls.Add(this.bntKraj);
+            this.panelMain.Controls.Add(this.listBox1);
+            this.panelMain.Controls.Add(this.btnDodaj);
+            this.panelMain.Controls.Add(this.btnObrisi);
+            this.panelMain.Controls.Add(this.bntPrikazi);
+            this.panelMain.Controls.Add(this.btnDozvola);
+            this.panelMain.Controls.Add(this.btnIzmjeni);
+            this.panelMain.Location = new System.Drawing.Point(12, 43);
+            this.panelMain.Name = "panelMain";
+            this.panelMain.Size = new System.Drawing.Size(760, 395);
+            this.panelMain.TabIndex = 9;
+            this.panelMain.Visible = false;
+            this.panelMain.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // RFIDKontolaPristupa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.listBox1);
+            this.ClientSize = new System.Drawing.Size(788, 456);
+            this.Controls.Add(this.panelMain);
             this.Controls.Add(this.btnObrisiPrikaz);
-            this.Controls.Add(this.bntKraj);
-            this.Controls.Add(this.btnDozvola);
-            this.Controls.Add(this.btnIzmjeni);
-            this.Controls.Add(this.bntPrikazi);
-            this.Controls.Add(this.btnObrisi);
-            this.Controls.Add(this.btnDodaj);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "RFIDKontolaPristupa";
             this.Text = "Form1";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panelMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -186,5 +202,6 @@
         private ToolStripMenuItem loginToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ListBox listBox1;
+        private Panel panelMain;
     }
 }
