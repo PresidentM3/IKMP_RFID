@@ -62,7 +62,7 @@
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(100, 23);
             this.txtUserName.TabIndex = 2;
-            this.txtUserName.Text = "Username";
+            this.txtUserName.Text = "admin";
             // 
             // txtSifra
             // 
@@ -70,7 +70,7 @@
             this.txtSifra.Name = "txtSifra";
             this.txtSifra.Size = new System.Drawing.Size(100, 23);
             this.txtSifra.TabIndex = 3;
-            this.txtSifra.Text = "Password";
+            this.txtSifra.Text = "admin";
             // 
             // buttonOdustani
             // 
@@ -94,7 +94,7 @@
             this.buttonPotvrdi.UseVisualStyleBackColor = true;
             this.buttonPotvrdi.Click += new System.EventHandler(this.buttonPotvrdi_Click);
             // 
-            // frmLogin
+            // FrmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -105,7 +105,7 @@
             this.Controls.Add(this.txtUserName);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "frmLogin";
+            this.Name = "FrmLogin";
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.PerformLayout();

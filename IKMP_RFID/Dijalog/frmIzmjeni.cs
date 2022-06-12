@@ -25,8 +25,6 @@ namespace IKMP_RFID.Dijalog
 
         }
 
-
-
         private string pretragaUnos;
         private string kriterijumIzmjena;
         private string unos;
@@ -58,8 +56,6 @@ namespace IKMP_RFID.Dijalog
                 conn.Close();
                 conn.Dispose();
             }
-
-
         }
 
         private void comboBoxKorisnik_DropDownClosed(object sender, EventArgs e)
@@ -83,8 +79,6 @@ namespace IKMP_RFID.Dijalog
                     DateTime vazi_do = reader.GetDateTime(4);
                     labelKorisnik.Text = id_kartice + "|" + ime + "|" + prezime + "|" + tip_kartice + "|" + (string)vazi_do.ToString();
                 }
-
-
 
             }
             catch (Exception ex)
@@ -144,8 +138,6 @@ namespace IKMP_RFID.Dijalog
             {
                 MessageBox.Show("Unos prazan!");
             }
-
-
         }
 
         private void comboBoxKorisnik_Click(object sender, EventArgs e)
