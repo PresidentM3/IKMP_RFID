@@ -38,7 +38,7 @@ namespace IKMP_RFID.Klase
             catch (Exception ex)
             {
                 // obrada greske
-                MessageBox.Show(ex.Message);
+                //MessageBox.Show(ex.Message);
                 return -1;
             }
             finally

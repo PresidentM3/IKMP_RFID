@@ -50,10 +50,7 @@ namespace IKMP_RFID
                 tCPclient = new TcpClient();
                 tCPclient.Connect(frmSerial.IP, int.Parse(frmSerial.Port));
 
-                stream = tCPclient.GetStream();
-
-                byte[] data = Encoding.UTF8.GetBytes("Hello from rfid!" + "\r\n");
-                stream.Write(data, 0, data.Length);
+                sendTCPIP("Hello from RFID!");
 
                 print2list("Connected");
 
@@ -63,8 +60,7 @@ namespace IKMP_RFID
             {
                     MessageBox.Show(ex.Message);
             }
-  
-            
+              
         }
 
         private void InitTCPIP()
@@ -72,38 +68,50 @@ namespace IKMP_RFID
 
         }
 
+        public void sendTCPIP(string msg)
+        {
+            stream = tCPclient.GetStream();
+
+            byte[] data = Encoding.UTF8.GetBytes(msg + "\r\n");
+            stream.Write(data, 0, data.Length);
+        }
+
+        public void sendTCIPbytes(byte[] data)
+        {   
+            
+            stream.Write(data, 0, data.Length);
+        }
+
+        //Izlaz
         private void SerialPort2_DataReceived2(object sender, SerialDataReceivedEventArgs e)
         {
             string msg = _serialPort2.ReadLine();
 
             if (msg != null)
             {
+                msg = msg.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
+                msg = msg.TrimStart();
+                ulazKontolaPristupa(msg, "izlaz");
                 print2list(msg);
-                izlazKontolaPristupa(msg);
-                
-            }
-            
 
-            
+            }      
         }
 
+        //Ulaz
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             string msg = _serialPort.ReadLine();
-
 
             if (msg != null)
             {
                 msg = msg.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
                 msg = msg.TrimStart();
-                ulazKontolaPristupa(msg);
+                ulazKontolaPristupa(msg, "ulaz");
                 print2list(msg);
             }
-      
-
         }
 
-        private void ulazKontolaPristupa(string msg)
+        private void ulazKontolaPristupa(string msg, string ulaz_izlaz)
         {
             KorisniciDatabase korisniciDatabase = new KorisniciDatabase();
             Korisnik korisnik = korisniciDatabase.findUserFromID(msg);
@@ -113,23 +121,94 @@ namespace IKMP_RFID
                 if (korisnik.Tip_kartice == "povlascena")
                 {
                     print2list("!!!!!!SLOBODAN ULAZ!!!!!!");
+                    sendTCPIP($"Korisnik sa karticom ID: {korisnik.IdKartice} --> SLOBODAN ULAZ");
+
+                    string data = "03,78,58,68";
+                    sendTCPIP(data);
+
+                    upisUBazuEvidencije(korisnik, ulaz_izlaz);
                 }
                 else if (korisnik.Tip_kartice == "obicna" && privjeraVremena())
                 {
                     print2list("!!!!!!SLOBODAN ULAZ!!!!!!");
+                    sendTCPIP($"Korisnik sa karticom ID: {korisnik.IdKartice} --> SLOBODAN ULAZ");
+
+                    string data = "03,78,58,68";
+                    sendTCPIP(data);
+
+                    upisUBazuEvidencije(korisnik, ulaz_izlaz);
                 }
                 else if (korisnik.Tip_kartice == "obicna" && !privjeraVremena())
                 {
                     print2list("!!!!!!ZABRANA!!!!!!");
+                    sendTCPIP($"Korisnik sa karticom ID: {korisnik.IdKartice} --> ZABRANA");
+
+                    string data = "03,78,58,90";
+                    sendTCPIP(data);
+
+                    upisUBazuEvidencije(korisnik, ulaz_izlaz);
                 }
-
-
             }
             else
             {
                 print2list("Kartica nije prinadjena u bazi.");
+
+                FrmDozvola frmDozvola = new FrmDozvola(msg);   
+                frmDozvola.ShowDialog();
+
+                if (frmDozvola.Dozvola)
+                {
+                    print2list("!!!!!!DOZVOLA!!!!!!");
+                    sendTCPIP($"Korisnik sa karticom ID: {msg} --> DOZVOLA");
+                    string data = "03, 78, 58, 80";
+                    sendTCPIP(data);
+                }
+                else
+                {
+                    print2list("!!!!!!ZABRANA!!!!!!");
+                    sendTCPIP($"Korisnik sa karticom ID: {msg} --> ZABRANA");
+                    string data = "03,78,58,90";
+                    sendTCPIP(data);
+                }
             }
             
+        }
+        private void upisUBazuEvidencije(Korisnik korisnik, string ulaz_izlaz)
+        {
+            NpgsqlConnection conn = new NpgsqlConnection($"Host = localhost; Port = 5432; Username = postgres; Password = 14235; Database = postgres");
+            try
+            {
+                conn.Open();
+                print2list("Konekcija otvorena...");
+                //string naredba = "SELECT rb, id_kartice, tip_kartice, ulaz_izlaz, ime, prezime, vrijeme, datum FROM public.evidencija ";
+                string naredba = $"INSERT INTO public.evidencija(id_kartice, ime, prezime, tip_kartice, ulaz_izlaz, vrijeme, datum) VALUES " +
+                        $"('{korisnik.IdKartice}', '{korisnik.Ime}', '{korisnik.Prezime}', '{korisnik.Tip_kartice}', '{ulaz_izlaz}', '15:56', '1999-12-12');";
+
+                NpgsqlCommand command = new NpgsqlCommand(naredba, conn);
+                int brRedova = command.ExecuteNonQuery();
+
+                if (brRedova >= 1)
+                {
+                    print2list($"Korisnik id: {korisnik.IdKartice} je dodat u bazu evidencije!");
+                }
+                else
+                {
+                    print2list("Korisnik nije pronadjen");
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                // obrada greske
+                print2list(ex.Message);
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
         }
 
         private bool privjeraVremena()
@@ -307,7 +386,7 @@ namespace IKMP_RFID
                     string ulaz_izlaz = reader.GetString(3);
                     string ime = reader.GetString(4);
                     string prezime = reader.GetString(5);
-                    string vrijeme  = reader.GetString(6);
+                    //DateTime vrijeme  = reader.GetDateTime(6);
                     DateTime datum = reader.GetDateTime(7);
                     print2list($"{rb.ToString().PadLeft(10)} | {id_kartice.PadLeft(10)} | {tip_kartice.PadLeft(10)} | {ulaz_izlaz.PadLeft(5)} | {ime.PadLeft(5)} | {prezime.PadLeft(5)} | {datum.ToString()}");
                 }
@@ -329,8 +408,8 @@ namespace IKMP_RFID
         private void bntPrikazi_Click(object sender, EventArgs e)
         {
             clearList();
-            prikazKorisniciBaze();
-            //prikazEvidencijaBaze();
+            //prikazKorisniciBaze();
+            prikazEvidencijaBaze();
 
 
         }
@@ -355,7 +434,7 @@ namespace IKMP_RFID
         {
             //panelMain.Visible = true;
             FrmLogin frmLogin = new();
-            int uloga;
+            int uloga = -1;
 
             if (frmLogin.ShowDialog() == DialogResult.OK)
             {
@@ -381,6 +460,7 @@ namespace IKMP_RFID
             else
             {
                 panelMain.Visible = false;
+                //MessageBox.Show("Pogrese -Korisnicko ime- ili -sifra-");
             }
         }
 
@@ -411,7 +491,7 @@ namespace IKMP_RFID
         {
             string time = DateTime.Now.ToString("t");
             Console.WriteLine("The current time is {0}", time);
-            labelTime.Text = time;
+            //labelTime.Text = time;
         }
 
 
@@ -426,6 +506,29 @@ namespace IKMP_RFID
         {
             FrmSerial frmSerial = new FrmSerial();
             frmSerial.ShowDialog();
+
+            try
+            {
+                _serialPort = new SerialPort(frmSerial.PortUlaz, 115200, Parity.None, 8, StopBits.One);
+                _serialPort2 = new SerialPort(frmSerial.PortIzlaz, 9600, Parity.None, 8, StopBits.One);
+                _serialPort.Open();
+                _serialPort2.Open();
+                _serialPort.DataReceived += SerialPort_DataReceived;
+                _serialPort2.DataReceived += SerialPort2_DataReceived2;
+
+                tCPclient = new TcpClient();
+                tCPclient.Connect(frmSerial.IP, int.Parse(frmSerial.Port));
+
+                sendTCPIP("Hello from RFID!");
+
+                print2list("Connected");
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

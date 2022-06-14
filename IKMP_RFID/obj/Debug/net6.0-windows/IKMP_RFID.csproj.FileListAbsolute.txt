@@ -58,3 +58,5 @@ C:\Git\IKMP_RFID\IKMP_RFID\obj\Debug\net6.0-windows\IKMP_RFID.Dijalog.FormObrisi
 C:\Git\IKMP_RFID\IKMP_RFID\obj\Debug\net6.0-windows\IKMP_RFID.Dijalog.FrmIzmjeni.resources
 C:\Git\IKMP_RFID\IKMP_RFID\obj\Debug\net6.0-windows\IKMP_RFID.Dijalog.YesNo.resources
 C:\Git\IKMP_RFID\IKMP_RFID\obj\Debug\net6.0-windows\IKMP_RFID.Dijalog.FrmSerial.resources
+C:\Git\IKMP_RFID\IKMP_RFID\obj\Debug\net6.0-windows\IKMP_RFID.Dijalog.FrmDozvola.resources
+C:\Git\IKMP_RFID\IKMP_RFID\obj\Debug\net6.0-windows\IKMP_RFID.Properties.Resources.resources

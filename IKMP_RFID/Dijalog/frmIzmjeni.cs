@@ -122,6 +122,9 @@ namespace IKMP_RFID.Dijalog
                     {
                         MessageBox.Show("Greska");
                     }
+                    //clear combobox and textbox
+                    comboBoxKorisnik.SelectedIndex = -1;
+                    textBoxUnos.Clear();
                 }
                 catch (Exception ex)
                 {
@@ -143,6 +146,11 @@ namespace IKMP_RFID.Dijalog
         private void comboBoxKorisnik_Click(object sender, EventArgs e)
         {
             loadComboBox();
+        }
+
+        private void FrmIzmjeni_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IKMP_RFID.Klase;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -35,8 +36,20 @@ namespace IKMP_RFID.Dijalog
             userName = txtUserName.Text;
             password = txtSifra.Text;
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            LoginDatabase logindtb = new();
+            int uloga = logindtb.CheckAccessCredentials(userName, password);
+
+            if (uloga < 0)
+            {
+                labelwrong.Text = "Pogrese -Korisnicko ime- ili -sifra-";
+            }
+            else
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+
+            
         }
 
         private void buttonOdustani_Click(object sender, EventArgs e)
