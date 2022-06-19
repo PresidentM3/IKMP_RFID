@@ -23,9 +23,19 @@ namespace IKMP_RFID.Dijalog
             {
                 comboBoxUlaz.Items.Add(ports[i]);
                 comboBoxIzlaz.Items.Add(ports[i]);
+                if (ports[i] == "COM9")
+                {
+                    comboBoxUlaz.SelectedIndex =i;
+                    //comboBoxIzlaz.DisplayMember = ports[i];
+                }
+                else if (ports[i] == "COM23")
+                {
+                    comboBoxIzlaz.SelectedIndex = i;
+                    //comboBoxIzlaz.DisplayMember = ports[i];
+                } 
             }
-            comboBoxUlaz.SelectedIndex = 0;
-            comboBoxIzlaz.SelectedIndex = 0;
+            //comboBoxUlaz.SelectedIndex = 0;
+            //comboBoxIzlaz.SelectedIndex = 0;
         }
 
         public string PortUlaz { get; set; }
@@ -41,6 +51,7 @@ namespace IKMP_RFID.Dijalog
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
+
             PortUlaz = comboBoxUlaz.SelectedItem.ToString();
             PortIzlaz = comboBoxIzlaz.SelectedItem.ToString(); ;
             IP = textBoxIP.Text;

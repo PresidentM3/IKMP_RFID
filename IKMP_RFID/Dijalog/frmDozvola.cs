@@ -13,11 +13,15 @@ namespace IKMP_RFID.Dijalog
     public partial class FrmDozvola : Form
     {
         public string id_kartice;
-        public FrmDozvola(string id_kartice)
+        public FrmDozvola(string id_kartice, int uloga)
         {
             InitializeComponent();
             this.id_kartice = id_kartice;
             labeldKarticeTxt.Text = id_kartice;
+            if (uloga < 111)
+            {
+                button2.Enabled = false;
+            }
         }
 
         private bool dozvola;

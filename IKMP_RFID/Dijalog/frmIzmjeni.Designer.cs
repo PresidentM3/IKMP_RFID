@@ -115,7 +115,8 @@ namespace IKMP_RFID.Dijalog
             "ime",
             "prezime",
             "id_kartice",
-            "tip_kartice"});
+            "tip_kartice",
+            "vazi_do"});
             this.comboBoxIzmjena.Location = new System.Drawing.Point(234, 120);
             this.comboBoxIzmjena.Name = "comboBoxIzmjena";
             this.comboBoxIzmjena.Size = new System.Drawing.Size(142, 29);
@@ -138,12 +139,13 @@ namespace IKMP_RFID.Dijalog
             this.textBoxUnos.Name = "textBoxUnos";
             this.textBoxUnos.Size = new System.Drawing.Size(142, 29);
             this.textBoxUnos.TabIndex = 8;
+            this.textBoxUnos.TextChanged += new System.EventHandler(this.textBoxUnos_TextChanged);
             // 
             // FrmIzmjeni
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(405, 334);
+            this.ClientSize = new System.Drawing.Size(473, 334);
             this.Controls.Add(this.textBoxUnos);
             this.Controls.Add(this.labelUnozIzmjene);
             this.Controls.Add(this.comboBoxIzmjena);

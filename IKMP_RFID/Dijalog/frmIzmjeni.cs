@@ -104,6 +104,11 @@ namespace IKMP_RFID.Dijalog
             kriterijumIzmjena = (string)comboBoxIzmjena.SelectedItem;
             unos = textBoxUnos.Text;
 
+            //if (kriterijumIzmjena == "vazi_do")
+            //{
+               
+            //}
+
             if (unos.Length > 0)
             {
                 NpgsqlConnection conn = new NpgsqlConnection($"Host = localhost; Port = 5432; Username = postgres; Password = 14235; Database = postgres");
@@ -149,6 +154,11 @@ namespace IKMP_RFID.Dijalog
         }
 
         private void FrmIzmjeni_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxUnos_TextChanged(object sender, EventArgs e)
         {
 
         }

@@ -1,6 +1,7 @@
 using IKMP_RFID.Dijalog;
 using IKMP_RFID.Klase;
 using Npgsql;
+using System.Data;
 using System.IO.Ports;
 using System.Net.Sockets;
 using System.Text;
@@ -15,6 +16,7 @@ namespace IKMP_RFID
         TcpClient tCPclient;
         NetworkStream stream;
         private DateTime time_now;
+        int ulagaLvl;
 
 
 
@@ -23,7 +25,7 @@ namespace IKMP_RFID
             InitializeComponent();
             initTimer();
             InitSerailPort();
-            InitTCPIP();
+            //InitTCPIP();
         }
 
         private void initTimer()
@@ -41,7 +43,7 @@ namespace IKMP_RFID
             try
             {
                 _serialPort = new SerialPort(frmSerial.PortUlaz, 115200, Parity.None, 8, StopBits.One);
-                _serialPort2 = new SerialPort(frmSerial.PortIzlaz, 9600, Parity.None, 8, StopBits.One);
+                _serialPort2 = new SerialPort(frmSerial.PortIzlaz, 115200, Parity.None, 8, StopBits.One);
                 _serialPort.Open();
                 _serialPort2.Open();
                 _serialPort.DataReceived += SerialPort_DataReceived;
@@ -63,10 +65,10 @@ namespace IKMP_RFID
               
         }
 
-        private void InitTCPIP()
-        {
+        //private void InitTCPIP()
+        //{
 
-        }
+        //}
 
         public void sendTCPIP(string msg)
         {
@@ -115,64 +117,168 @@ namespace IKMP_RFID
         {
             KorisniciDatabase korisniciDatabase = new KorisniciDatabase();
             Korisnik korisnik = korisniciDatabase.findUserFromID(msg);
+            byte[] data2 = new byte[4];
 
             if (korisnik != null)
             {   
                 if (korisnik.Tip_kartice == "povlascena")
                 {
-                    print2list("!!!!!!SLOBODAN ULAZ!!!!!!");
-                    sendTCPIP($"Korisnik sa karticom ID: {korisnik.IdKartice} --> SLOBODAN ULAZ");
+                    print2list($"!!!!!!SLOBODAN {ulaz_izlaz}!!!!!!");
+                    sendTCPIP($"Korisnik sa karticom ID: {korisnik.IdKartice} --> SLOBODAN {ulaz_izlaz}");
 
+                    data2 = new byte[4] { 3, 78, 58, 68 };
                     string data = "03,78,58,68";
                     sendTCPIP(data);
+                    sendTCIPbytes(data2);
 
                     upisUBazuEvidencije(korisnik, ulaz_izlaz);
                 }
-                else if (korisnik.Tip_kartice == "obicna" && privjeraVremena())
+                else if (korisnik.Tip_kartice == "obicna" && privjeraVremena(korisnik.VaziDo))
                 {
-                    print2list("!!!!!!SLOBODAN ULAZ!!!!!!");
-                    sendTCPIP($"Korisnik sa karticom ID: {korisnik.IdKartice} --> SLOBODAN ULAZ");
+                    print2list($"!!!!!!SLOBODAN {ulaz_izlaz}!!!!!!");
+                    sendTCPIP($"Korisnik sa karticom ID: {korisnik.IdKartice} --> SLOBODAN {ulaz_izlaz}");
 
                     string data = "03,78,58,68";
+                    data2 = new byte[4] { 3, 78, 58, 68 };
                     sendTCPIP(data);
+                    sendTCIPbytes(data2);
 
                     upisUBazuEvidencije(korisnik, ulaz_izlaz);
                 }
-                else if (korisnik.Tip_kartice == "obicna" && !privjeraVremena())
+                else if (korisnik.Tip_kartice == "obicna" && !privjeraVremena(korisnik.VaziDo))
                 {
                     print2list("!!!!!!ZABRANA!!!!!!");
                     sendTCPIP($"Korisnik sa karticom ID: {korisnik.IdKartice} --> ZABRANA");
 
-                    string data = "03,78,58,90";
+                    string data = "\n03,78,58,90";
+                    data2 = new byte[4] { 3, 78, 58, 90 };
+
+                    sendTCIPbytes(data2);
                     sendTCPIP(data);
 
-                    upisUBazuEvidencije(korisnik, ulaz_izlaz);
+                    //upisUBazuEvidencije(korisnik, ulaz_izlaz);
+                }
+                else if (korisnik.Tip_kartice != "obicna"  || korisnik.Tip_kartice != "povlascena")
+                {
+                    print2list("!!!!!!ZABRANA!!!!!!");
+                    sendTCPIP($"Korisnik sa karticom ID: {korisnik.IdKartice} --> ZABRANA");
+
+                    string data = "\n03,78,58,90";
+                    data2 = new byte[4] { 3, 78, 58, 90 };
+
+                    sendTCIPbytes(data2);
+                    sendTCPIP(data);
+
+                    //upisUBazuEvidencije(korisnik, ulaz_izlaz);
+                }
+                else if (korisnik.Tip_kartice == "dozvola")
+                {
+                    FrmDozvola frmDozvola = new FrmDozvola(msg, ulagaLvl);
+                    frmDozvola.ShowDialog();
+
+                    if (frmDozvola.Dozvola)
+                    {
+                        print2list($"ID: {msg}");
+                        print2list("!!!!!!DOZVOLA!!!!!!");
+                        sendTCPIP($"Korisnik sa karticom ID: {msg} --> DOZVOLA");
+
+                        string data = "\n03, 78, 58, 80";
+                        data2 = new byte[4] { 3, 78, 58, 90 };
+
+                        sendTCPIP(data);
+                        sendTCIPbytes(data2);
+                        upisUBazuEvidencije(korisnik, ulaz_izlaz);
+                    }
+                    else
+                    {
+                        print2list($"ID: {msg}");
+                        print2list("!!!!!!ZABRANA!!!!!!");
+                        sendTCPIP($"Korisnik sa karticom ID: {msg} --> ZABRANA");
+
+                        string data = "\n03,78,58,90";
+                        data2 = new byte[4] { 3, 78, 58, 90 };
+
+                        sendTCIPbytes(data2);
+                        sendTCPIP(data);
+                        //upisUBazuEvidencije(korisnik, ulaz_izlaz);
+                    }
+
+
                 }
             }
             else
             {
-                print2list("Kartica nije prinadjena u bazi.");
+                print2list("Kartica nije pronadjena u bazi.");
 
-                FrmDozvola frmDozvola = new FrmDozvola(msg);   
+                FrmDozvola frmDozvola = new FrmDozvola(msg, ulagaLvl);   
                 frmDozvola.ShowDialog();
 
                 if (frmDozvola.Dozvola)
                 {
-                    print2list("!!!!!!DOZVOLA!!!!!!");
+                    print2list($"ID: {msg}");
+                    print2list("!!!!!!DOZVOLA!!!!!!");                    
                     sendTCPIP($"Korisnik sa karticom ID: {msg} --> DOZVOLA");
-                    string data = "03, 78, 58, 80";
+
+                    string data = "\n03, 78, 58, 80";
+                    data2 = new byte[4] { 3, 78, 58, 90 };
+
                     sendTCPIP(data);
+                    sendTCIPbytes(data2);
+                    upisUBazuEvidencijeID(msg);
                 }
                 else
                 {
+                    print2list($"ID: {msg}");
                     print2list("!!!!!!ZABRANA!!!!!!");
                     sendTCPIP($"Korisnik sa karticom ID: {msg} --> ZABRANA");
-                    string data = "03,78,58,90";
+
+                    string data = "\n03,78,58,90";
+                    data2 = new byte[4] { 3, 78, 58, 90 };
+
+                    sendTCIPbytes(data2);
                     sendTCPIP(data);
+                    //upisUBazuEvidencijeID(msg);
                 }
             }
             
         }
+        private void upisUBazuEvidencijeID(string id)
+        {
+            NpgsqlConnection conn = new NpgsqlConnection($"Host = localhost; Port = 5432; Username = postgres; Password = 14235; Database = postgres");
+            try
+            {
+                conn.Open();
+                print2list("Konekcija otvorena...");
+                DateTime today = DateTime.Today;
+                //string naredba = "SELECT rb, id_kartice, tip_kartice, ulaz_izlaz, ime, prezime, vrijeme, datum FROM public.evidencija ";
+                string naredba = $"INSERT INTO public.evidencija(id_kartice, ime, prezime, tip_kartice, ulaz_izlaz, vrijeme, datum) VALUES " +
+                        $"('{id}', 'nepoznato', 'nepoznato', 'nepoznato', 'nepoznato', '{time_now}', '{today.ToString("yyyy-MM-dd")}');";
+
+                NpgsqlCommand command = new NpgsqlCommand(naredba, conn);
+                int brRedova = command.ExecuteNonQuery();
+
+                if (brRedova >= 1)
+                {
+                    print2list($"Korisnik id: {id} je dodat u bazu evidencije!");
+                }
+                else
+                {
+                    print2list("Korisnik nije pronadjen");
+                }
+            }
+            catch (Exception ex)
+            {
+                // obrada greske
+                print2list(ex.Message);
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+
+        }
+
         private void upisUBazuEvidencije(Korisnik korisnik, string ulaz_izlaz)
         {
             NpgsqlConnection conn = new NpgsqlConnection($"Host = localhost; Port = 5432; Username = postgres; Password = 14235; Database = postgres");
@@ -180,9 +286,10 @@ namespace IKMP_RFID
             {
                 conn.Open();
                 print2list("Konekcija otvorena...");
+                DateTime today = DateTime.Today;
                 //string naredba = "SELECT rb, id_kartice, tip_kartice, ulaz_izlaz, ime, prezime, vrijeme, datum FROM public.evidencija ";
                 string naredba = $"INSERT INTO public.evidencija(id_kartice, ime, prezime, tip_kartice, ulaz_izlaz, vrijeme, datum) VALUES " +
-                        $"('{korisnik.IdKartice}', '{korisnik.Ime}', '{korisnik.Prezime}', '{korisnik.Tip_kartice}', '{ulaz_izlaz}', '15:56', '1999-12-12');";
+                        $"('{korisnik.IdKartice}', '{korisnik.Ime}', '{korisnik.Prezime}', '{korisnik.Tip_kartice}', '{ulaz_izlaz}', '{time_now}', '{today.ToString("yyyy-MM-dd")}');";
 
                 NpgsqlCommand command = new NpgsqlCommand(naredba, conn);
                 int brRedova = command.ExecuteNonQuery();
@@ -211,22 +318,32 @@ namespace IKMP_RFID
             }
         }
 
-        private bool privjeraVremena()
+        private bool privjeraVremena(DateTime vazi_do)
         {
             TimeSpan start = new TimeSpan(7, 0, 0); //10 o'clock
             TimeSpan end = new TimeSpan(15, 0, 0); //12 o'cloc
             TimeSpan now = DateTime.Now.TimeOfDay;
 
-            if ((now > start) && (now < end))
+            DateTime today = DateTime.Today;
+            
+
+
+            if (vazi_do > today)
             {
-                return true;
+                if ((now > start) && (now < end))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
                 return false;
             }
-
-            
+ 
         }
 
         private void izlazKontolaPristupa(string msg)
@@ -379,16 +496,16 @@ namespace IKMP_RFID
 
                 NpgsqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
-                {   
+                {
                     int rb = reader.GetInt32(0);
-                    string id_kartice = reader.GetString(1); 
+                    string id_kartice = reader.GetString(1);
                     string tip_kartice = reader.GetString(2);
                     string ulaz_izlaz = reader.GetString(3);
                     string ime = reader.GetString(4);
                     string prezime = reader.GetString(5);
                     //DateTime vrijeme  = reader.GetDateTime(6);
                     DateTime datum = reader.GetDateTime(7);
-                    print2list($"{rb.ToString().PadLeft(10)} | {id_kartice.PadLeft(10)} | {tip_kartice.PadLeft(10)} | {ulaz_izlaz.PadLeft(5)} | {ime.PadLeft(5)} | {prezime.PadLeft(5)} | {datum.ToString()}");
+                    print2list($"{rb.ToString().PadLeft(10)} | {id_kartice.PadLeft(10)} | {tip_kartice.PadLeft(10)} | {ulaz_izlaz.PadLeft(5)} | {ime.PadLeft(5)} | {prezime.PadLeft(5)} | {datum.ToString("dd/M/yyyy")}");
                 }
 
             }
@@ -403,7 +520,8 @@ namespace IKMP_RFID
                 conn.Dispose();
             }
         } 
-
+            
+        
 
         private void bntPrikazi_Click(object sender, EventArgs e)
         {
@@ -446,6 +564,7 @@ namespace IKMP_RFID
         }
         private void dozvoliPrikaz(int uloga)
         {
+            ulagaLvl = uloga;
             if (uloga > 0)
             {
                 panelMain.Visible = true;
